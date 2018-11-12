@@ -823,7 +823,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 Vy = vy;
             }
 
-            // ytre hörn
+            /* ytre hörn
 
             if ( (marbH >= ((W1h - marbRW*2) - (WallR)) && marbH <= (W1h + (WallR))) && (marbW <= W1maxw) && (marbW >= W1maxw + WallR)){
 
@@ -831,7 +831,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
                 Vx = vx;
             }
-
+            */
 
             // väggar vågrätt   MinWidth + baseW, baseH*2 + MinHight, MinWidth + baseW, baseH*4 + MinHight
 
@@ -859,6 +859,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
                 Vy = vy;
             }
+
 
             // Väg 1} Klar
 
