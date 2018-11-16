@@ -180,7 +180,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
         //tjocklek (kan vara Swhith*0.025f)
 
-        float WallThcc = Swhith*0.025f;
+        float WallThcc = Swhith*0.015f;
 
         dungenWall.setStrokeWidth(WallThcc);
 
@@ -409,8 +409,8 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         // vart kulan ska starta
         if (Time == 0){
 
-            marbW = 0.05f * canvas.getWidth();
-            marbH = 0.05f * canvas.getHeight();
+            marbW = 0.4f * canvas.getWidth();
+            marbH = 0.5f * canvas.getHeight();
 
             canvas.drawBitmap(marb, marbW, marbH, null);
 
@@ -768,7 +768,9 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             // Dungen Ramen{
 
             //  MINSTA FOR FUCKING HELVETE ÖVERSTA VÄGEN I DEN RUTAN
-            if (marbH <= MinHight + (WallR)) {
+            if (marbH < MinHight + (WallR)) {
+
+                marbH = MinHight + (WallR) + 1;
 
                 vy = Math.abs(Vy) * wallH;
 
@@ -776,25 +778,28 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             }
 
             // MINSTA FOR FUCKING HELVETE VÄNSTRA SIDAN AV RUTAN
-            if ( marbW <= (MinWidth + (WallR))) {
+            if ( marbW < (MinWidth + (WallR))) {
+
+                marbW = (MinWidth + WallR) + 1;
 
                 vx = Math.abs(Vx) * wallH;
-
                 Vx = vx;
             }
 
             // MAX FOR
-            if (marbH >= MaxHight - marb.getHeight() - (WallR)){
+            if (marbH > MaxHight - marb.getHeight() - (WallR)){
+
+                marbH = (MaxHight - marb.getHeight()) - WallR -1;
 
                 vy =  - Vy * wallH;
-
                 Vy = vy;
             }
 
-            if (marbW >= (MaxWidth - marb.getWidth() - (WallR))){
+            if (marbW > (MaxWidth - marb.getWidth() - (WallR))){
 
-                vx =  - Vx * wallH;
+                marbW = (MaxWidth - marb.getWidth()) - WallR - 1;
 
+                vx = - Vx * wallH;
                 Vx = vx;
             }
 
@@ -814,24 +819,42 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             // laburint vägarnas stuts :/ osäker om det är rätt!
 
 
-            if ( ((marbH >=  (W1h - marbRW*2) - (WallR)) && (marbH <=  (W1h) + (WallR))) && marbW <= W1maxw){
+            if (((marbH > (W1h - marbRW*2) - (WallR)) && (marbH <  (W1h) + (WallR))) && marbW < W1maxw - WallR){
 
-                // marbH = MinHight +(baseH) - 15;
+                if((marbH > (W1h - marbRW*2) - (WallR)) && marbH < W1h){
 
-                vy = -Vy * wallH;
+                    marbH = (W1h - marbRW*2) - (WallR) - 1;
 
-                Vy = vy;
+
+                    vy = -Vy * wallH;
+                    Vy = vy;
+
+                }
+
+                  if (marbH < (W1h + WallR) && marbH > W1h){
+
+                    marbH = (W1h + WallR) + 1;
+
+                    vy = Math.abs(Vy) * wallH;
+                    Vy = vy;
+                }
+
             }
 
-            /* ytre hörn
+            // ytre hörn
 
-            if ( (marbH >= ((W1h - marbRW*2) - (WallR)) && marbH <= (W1h + (WallR))) && (marbW <= W1maxw) && (marbW >= W1maxw + WallR)){
+            if ( (marbH > ((W1h - marbRW*2) - (WallR)) && marbH < (W1h + (WallR))) && (marbW < W1maxw + WallR ) && (marbW > W1maxw - WallR)){
 
-                vx = -Vx * wallH;
 
-                Vx = vx;
+                    marbW = (W1maxw + WallR) + 1;
+
+                    vx = - Vx * wallH;
+
+                    Vx = vx;
+
+                    // 1 KRAR RÖR EJ (LYSSNA PÅ DET SOM STÅR)
             }
-            */
+
 
             // väggar vågrätt   MinWidth + baseW, baseH*2 + MinHight, MinWidth + baseW, baseH*4 + MinHight
 
@@ -842,26 +865,59 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             float W2maxh = MinHight + baseH*4;
 
 
-            if ((marbW >= (W2w) + (WallR)) && (marbW <= (W2w - marbRW*2) - (WallR)) && marbH <= W2maxh && marbH >= W2minh){
+            if ((marbW > (W2w) - (WallR)) && (marbW < (W2w - marbRW*2) + (WallR)) && marbH < W2maxh - WallR && marbH > W2minh){
 
-                // marbH = MinHight +(baseH) - 15;
+                if (marbW < W2w - WallR && marbW > (W2w)) {
 
-                vx = -Vx * wallH;
+                    marbW = W2w - WallR - 1;
 
-                Vx = vx;
-            }
+                    vx = -Vx * wallH;
+                    Vx = vx;
+
+                }
+
+                if (marbW > (W2w) + (WallR) && marbW < (W2w)) {
+
+                    marbW = (W2w) + WallR + 1;
+
+                    vx = -Vx * wallH;
+                    Vx = vx;
+                }
+
+            } // KLAR
 
             // Väg kant
-            if ( (marbW >= ((W2w - marbRW*2) - (WallR)) && marbW <= (W2w + (WallR))) && (marbH <= W2maxh) && (marbH >= W2maxh - WallR)){
+            if ( (marbW > ((W2w - marbRW*2) - (WallR)) && marbW < (W2w + (WallR))) && (marbH < W2maxh) && (marbH > W2maxh + WallR)){ // fix later
 
 
-                vy = -Vy * wallH;
+                if (marbW < W2w + WallR && marbW > W2w){
 
-                Vy = vy;
-            }
+                    marbW = (W2w - WallR) - 1;
+
+                    vx = -Vx * wallH;
+                    Vx = vx;
+                }
+
+                if (marbW > W2w - marbRW*2 - WallR && marbW < W2w) {
+
+                    marbW = W2w - marbRW*2 - WallR + 1;
+
+                    vx = Math.abs(Vx) * wallH;
+                    Vx = vx;
+
+                }
 
 
-            // Väg 1} Klar
+                if (marbH > W2maxh){
+
+                    marbH = W2maxh + 1;
+
+                    vy = Math.abs(Vy) * wallH;
+                    Vy = vy;
+                }
+            } // KLAR VÄG 2
+
+            // Väg 1} Klar HELT KLAR RÖR INTE BRO
 
             // Väg 2{
 
@@ -880,14 +936,14 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 Vx = vx;
             }
 
-            /* ytre hörn
+            // ytre hörn
             if ( (marbW >= ((W3w - marbRW*2) - (WallR)) && marbW <= (W3w + (WallR))) && (marbH <= W3maxh) && (marbH >= W3maxh - 10)){
 
                 vy = -Vy * wallH;
 
                 Vy = vy;
             }
-*/
+
             // 4
 
             float W4h = MinHight + baseH*2;
@@ -897,7 +953,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
             if ( (marbH >= (W4h  - marbRW*2 - (WallR)) && marbH <= (W4h + WallR)) && marbW <= W4minw && marbW >= W4maxw){
 
-                // marbH = MinHight +(baseH) - 15;
+                marbH = MinHight +(baseH) - 1;
 
                 vy = -Vy * wallH;
 
@@ -946,7 +1002,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             float W6minw = MinWidth + baseW*2;
             float W6maxw = MinWidth + baseW*3;
 
-            if ( (marbH >= (W6h - marbRW*2 - (WallR)) && marbH <= (W6h + WallR)) && marbW <= W6minw && marbW >= W6maxw){
+            if ((marbH >= (W6h - marbRW*2 - (WallR)) && marbH <= (W6h + WallR)) && marbW <= W6minw && marbW >= W6maxw){
 
                 // marbH = MinHight +(baseH) - 15;
 
@@ -1008,7 +1064,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 Vy = vy;
             }
 
-            // Väg kant
+            /* Väg kant
 
             if ( (marbH >= (W8h -  marbRW*2 - (WallR)) && marbH <= (W8h + WallR)) && (marbW <= W8maxw - WallR) && (marbW >= W8maxw)){
 
@@ -1016,7 +1072,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
                 Vx = vx;
             }
-
+*/
 
             // 9
 
@@ -1034,7 +1090,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 Vy = vy;
             }
 
-            // Väg kant
+            /* Väg kant
 
             if ( (marbH >= (W9h -  marbRW*2 - (WallR)) && marbH <= (W9h + WallR)) && (marbW <= W9maxw - WallR) && (marbW >= W9maxw)){
 
@@ -1043,6 +1099,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 Vx = vx;
             }
 
+            */
 
             // 10
 
@@ -1080,23 +1137,38 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             float W11minh = MinHight + baseH*9;
 
 
-            if ((marbW >= (W11w - marbRW*2) - (WallR)) && (marbW <= (W11w) + (WallR)) && marbH >= W11minh + (10)){
+            if ((marbW > (W11w - marbRW*2) - WallR) && (marbW < (W11w) + (WallR)) && marbH > W11minh + WallR){
 
-                // marbH = MinHight +(baseH) - 15;
+                // if(marbW < (W11w - WallR) && marbW > (W11w)) {
 
-                vx = -Vx * wallH;
+                if(marbW > (W11w - marbRW*2) - WallR && marbW < W11w) {
 
-                Vx = vx;
+                    marbW = (W11w - marbRW*2) - WallR - 1;
 
-            }
+                    vx = -Vx * wallH;
+                    Vx = vx;
+                }
+
+                if(marbW < W11w + WallR && marbW > (W11w)){
+
+                    marbW = W11w + WallR + 1;
+
+                    vx = Math.abs(Vx) * wallH;
+                    Vx = vx;
+
+                }
+            } // RÖR EJ om du gör det DÖDA DIG SJÄLV
+
+            // KLAR
 
             // ytre hörn
-            if ( (marbW >= ((W11w - marbRW*2) - (WallR)) && marbW <= (W11w + (WallR))) && (marbH <= W11minh) && (marbH >= W11minh + 10)){
+            if ( (marbW > ((W11w - marbRW*2) - (WallR)) && marbW < (W11w + (WallR))) && (marbH < W11minh) && (marbH > W11minh - WallR)){
+
+                marbH = W11minh - WallR - 1;
 
                 vy = -Vy * wallH;
-
                 Vy = vy;
-            }
+            }  //RÖR EJ klar
 
             // 12 klar
 
@@ -1105,25 +1177,89 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             float W12minw = MinWidth + baseW*2;
             float W12maxw = MinWidth + baseW*3;
 
-            if ( (marbH >= (W12h - (WallR)) && marbH <= (W12h + marbRW*2) + (WallR)) && marbW <= W12minw && marbW >= W12maxw - 10){
+            if (marbH < (W12h + marbRW*2) + (WallR) && marbH > (W12h - (WallR)) && marbW < W12maxw && marbW > W12minw - WallR){
 
-                // marbH = MinHight +(baseH) - 15;
+                if(marbH > (W12h - WallR)&& marbH < W12h) {
+                    marbH = (W12h - WallR) -1;
 
-                vy = -Vy * wallH;
+                    vy = -Vy * wallH;
 
-                Vy = vy;
+                    Vy = vy;
+                }
+
+                if (marbH < (W12h + marbRW*2) + (WallR) && marbH > (W12h)){
+
+                    marbH = (W12h + marbRW*2) + WallR +1;
+
+                    vy = Math.abs(Vy) * wallH;
+                    Vy = vy;
+                }
+
+
+            }
+
+            // Väg kant  (marbW > (W2w - marbRW*2) - (WallR)) && marbW < (W2w + (WallR))) && (marbH < W2maxh) && (marbH > W2maxh + WallR)
+
+            if ( (marbH > (W12h - WallR)) && (marbH < (W12h + marbRW*2) + WallR) && (marbW < W12maxw ) && (marbW > W12maxw + WallR)){
+
+                if (marbH < W12h + WallR && marbH > W12h && marbW < W12maxw - WallR){
+
+                    marbH = (W12h - WallR) - 1;
+
+                    vy = -Vy * wallH;
+                    Vy = vy;
+                }
+
+                if (marbH > W12h - marbRW*2 - WallR && marbH < W12h && marbW < W12maxw - WallR) {
+
+                    marbH = W12h - marbRW*2 - WallR + 1;
+
+                    vy = Math.abs(Vy) * wallH;
+                    Vy = vy;
+
+                }
+
+
+                if (marbW > W12maxw + WallR){
+
+                    marbW = W12maxw + WallR + 1;
+
+                    vx = Math.abs(Vx) * wallH;
+                    Vx = vx;
+                }
 
             }
 
             // Väg kant
+            if ( (marbW > ((W2w - marbRW*2) - (WallR)) && marbW < (W2w + (WallR))) && (marbH < W2maxh) && (marbH > W2maxh + WallR)){ // fix later
 
-            if ( (marbH >= (W12h - (WallR)) && marbH <= (W12h + marbRW*2) + (WallR)) && (marbW <= W12maxw - 10 ) && (marbW >= W12maxw)){
 
-                vx = -Vx * wallH;
+                if (marbW < W2w + WallR && marbW > W2w){
 
-                Vx = vx;
-            }
+                    marbW = (W2w - WallR) - 1;
 
+                    vx = -Vx * wallH;
+                    Vx = vx;
+                }
+
+                if (marbW > W2w - marbRW*2 - WallR && marbW < W2w) {
+
+                    marbW = W2w - marbRW*2 - WallR + 1;
+
+                    vx = Math.abs(Vx) * wallH;
+                    Vx = vx;
+
+                }
+
+
+                if (marbH > W2maxh){
+
+                    marbH = W2maxh + 1;
+
+                    vy = Math.abs(Vy) * wallH;
+                    Vy = vy;
+                }
+            } // KLAR VÄG 2
             // Väg 3} Klar
 
             // Väg 4 {
